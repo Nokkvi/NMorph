@@ -15,7 +15,7 @@ function
               varCount = 0;
               varTable = new HashMap<String,Integer>();
           }
-          '(' optparlist ')' '{' decls exprs '}'
+    '(' optparlist ')' '{' decls exprs '}'
           {
             $$ = new Object[]{$1, $4, $7, ((Vector<Object>)($8)).toArray()};
           }
@@ -94,6 +94,7 @@ body
 
 private static int varCount;
 private static HashMap<String,Integer> varTable;
+private NanoMorphoLexer lexer;
 
 private static void addVar( String name )
 {
@@ -108,6 +109,41 @@ private static int findVar( String name )
 	if( res == null )
 		throw new Error("Variable "+name+" does not exist, near line "+NanoMorphoLexer.getLine());
 	return res;
+}
+
+public NinoParser(Reader r) {
+	lexer = new NanoMorphoLexer(r,this);
+}
+
+private int yylex()
+{
+	int yyl_return = -1;
+	try
+	{
+		yylval = null;
+		yyl_return = lexer.yylex();
+		if( yylval==null )
+			yylval = new NinoParserVal(NinoParser.yyname[yyl_return]);
+	}
+	catch (IOException e)
+	{
+		System.err.println("IO error: "+e);
+	}
+	return yyl_return;
+}
+
+public void yyerror( String error )
+{
+	System.err.println("Error: "+error);
+	System.err.println("Line: "+lexer.getLine());
+	System.err.println("Column: "+lexer.getColumn());
+	System.exit(1);
+}
+
+public static void main( String[] args) 
+{
+	NinoParser par = new NinoParser(new FileReader(args[0]));
+	par.yyparse();
 }
 
 static void generateProgram( String filename, Object[] funs )
