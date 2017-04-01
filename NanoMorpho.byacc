@@ -1,4 +1,11 @@
-%token NAME, LITERAL, IF, ELSE, ELSEIF, VAR, WHILE, OPNAME, RETURN
+%{
+        import java.io.*;
+        import java.util.*;
+%}
+%token <sval> NAME, LITERAL, OPNAME, ERROR
+%type <obj> program function exprs expr binopexpr smallexpr optexpr nonemptyoptexpr elseifexpr elseexpr body
+%type <ival> decls decl parlist optparlist
+%token IF, ELSE, ELSEIF, VAR, WHILE, RETURN
 %%
 
 start
@@ -22,8 +29,8 @@ function
   ;
 
 parlist
-  : NAME {$$ = 1; addVar($1);}
-  | parlist ',' NAME {$$ = 1+$1; addVar($3);}
+  : NAME { addVar($1);$$ = $$+1;}
+  | parlist ',' NAME { addVar($3);$$ = 1+$1;}
   ;
 
 optparlist
@@ -37,12 +44,13 @@ decls
   ;
 
 decl
-  : VAR parlist {$$ = $2;}
+  :	decl ',' NAME		{ addVar($3); $$=$1+1; }
+  |	VAR NAME {addVar($2); $$=1;}
   ;
 
 exprs
   : expr ';' {$$ = new Vector<Object>(); ((Vector<Object>)($$)).add($1);}
-  | exprs expr ';' {((Vector<Object>)($1)).add($2); $$=$1;}
+  | exprs expr ';' { ((Vector<Object>)($1)).add($2); $$=$1;}
   ;
 
 expr
@@ -52,37 +60,37 @@ expr
   ;
 
 binopexpr
-  : smallexpr {$$ = $1;}
-  | binopexpr OPNAME smallexpr {$$ = new Object[]{"CALL", $2, $3};}
+  : smallexpr {$$=$1;}
+  | binopexpr OPNAME smallexpr {$$ = new Object[]{"CALL", $2, new Object[]{$1, $3}};}
   ;
 
 smallexpr
   : NAME {$$ = new Object[]{"NAME", findVar($1)};}
-  | NAME '(' optexpr ')' {$$ = new Object[]{"CALL", $1, $3};}
-  | OPNAME smallexpr {$$ = new Object[]{"OPNAME", $1, $2};}
+  | NAME '(' optexpr ')' {$$ = new Object[]{"CALL", $1, new Object[]{$3}};}
+  | OPNAME smallexpr {$$ = new Object[]{"CALL", $1, new Object[]{$2}};}
   | LITERAL { $$ = new Object[]{"LITERAL", $1};}
   | '(' expr ')' {$$ = $2;}
-  | IF expr body elseifexpr elseexpr {$$ = new Object[]{"IF", $2, $3, $4, $5};}
-  | WHILE expr body {$$ = new Object[]{"WHILE", $2, $3};}
+  | IF expr body elseifexpr elseexpr {$$ = new Object[]{"IF", $2, ((Vector<Object>)($3)).toArray(), $4, $5};}
+  | WHILE expr body {$$ = new Object[]{"WHILE", $2, ((Vector<Object>)($3)).toArray()};}
   ;
 
 optexpr
-  : {$$ = null;}
+  : {}
   | nonemptyoptexpr {$$ = $1;}
   ;
 
 nonemptyoptexpr
-  : expr {$$ = new Vector<Object>(); ((Vector<Object>)($$)).add($1);}
-  | nonemptyoptexpr ',' expr {((Vector<Object>)($1)).add($3); $$=$1;}
+  : expr {$$ = $1;}
+  | nonemptyoptexpr ',' expr  {$$ = new Object[]{$1, $3};}
   ;
 
 elseifexpr
   : {$$ = null;}
-  | elseifexpr ELSEIF expr body {$$ = new Object[]{"ELSEIF", $3, $4, $1};}
+  | ELSEIF expr body elseifexpr {$$ = new Object[]{"ELSEIF", $2, ((Vector<Object>)($3)).toArray(), $4};}
   ;
 
 elseexpr
-  : ELSE body  {$$ = new Object[]{"ELSE", $2};}
+  : ELSE body  {$$ = new Object[]{"ELSE", ((Vector<Object>)($2)).toArray()};}
   | {$$ = null;}
   ;
 
@@ -95,23 +103,24 @@ body
 private static int varCount;
 private static HashMap<String,Integer> varTable;
 private NanoMorphoLexer lexer;
+private static String name;
 
-private static void addVar( String name )
+private void addVar( String name )
 {
   if( varTable.get(name) != null )
-  	throw new Error("Variable "+name+" already exists, near line "+NanoMorphoLexer.getLine());
+  	throw new Error("Variable "+name+" already exists, near line "+lexer.getLine());
   varTable.put(name,varCount++);
 }
 
-private static int findVar( String name )
+private int findVar( String name )
 {
 	Integer res = varTable.get(name);
 	if( res == null )
-		throw new Error("Variable "+name+" does not exist, near line "+NanoMorphoLexer.getLine());
+		throw new Error("Variable "+name+" does not exist, near line "+lexer.getLine());
 	return res;
 }
 
-public NinoParser(Reader r) {
+public NanoMorphoParser(Reader r) {
 	lexer = new NanoMorphoLexer(r,this);
 }
 
@@ -123,7 +132,7 @@ private int yylex()
 		yylval = null;
 		yyl_return = lexer.yylex();
 		if( yylval==null )
-			yylval = new NinoParserVal(NinoParser.yyname[yyl_return]);
+			yylval = new NanoMorphoParserVal(NanoMorphoParser.yyname[yyl_return]);
 	}
 	catch (IOException e)
 	{
@@ -140,9 +149,10 @@ public void yyerror( String error )
 	System.exit(1);
 }
 
-public static void main( String[] args) 
+public static void main( String[] args) throws IOException, FileNotFoundException
 {
-	NinoParser par = new NinoParser(new FileReader(args[0]));
+	NanoMorphoParser par = new NanoMorphoParser(new FileReader(args[0]));
+  name = args[0].substring(0,args[0].lastIndexOf('.'));
 	par.yyparse();
 }
 
@@ -171,7 +181,6 @@ static void generateFunction( Object[] fun )
   System.out.println("#\""+fname+"[f"+argCount+"]\" =");
 
   System.out.println("[");
-
   for(int k = 0; k<varCount;k++){
     System.out.println("(MakeVal null)");
     System.out.println("(Push)");
@@ -190,7 +199,6 @@ static void generateExpr( Object[] e )
 {
   switch((String)e[0]){
     case "NAME":
-      if(e[1] == null){}
       System.out.println("(Fetch "+e[1]+")");
       return;
     case "LITERAL":
@@ -206,22 +214,27 @@ static void generateExpr( Object[] e )
       return;
     case "IF":
       //e = {"IF" expr body elseifexpr elseexpr}
-      Object[] argu = (Object[])e[3];
       int labElse = nextLab++;
       int labEnd = nextLab++;
       generateExpr((Object[])e[1]);
       System.out.println("(GoFalse _"+labElse+")");
       generateBody((Object[])e[2]);
       System.out.println("(Go _"+labEnd+")");
-      for(int i = 0; i<argu.length-1;i+=3){
-        System.out.println("_"+labElse+":");
-        generateExpr((Object[])argu[i+1]);
-        System.out.println("(GoFalse _"+labElse+")");
-        generateBody((Object[])argu[i+2]);
-        System.out.println("(Go _"+labEnd+")");
+      if(e[3]!=null){
+        Object[] argu = (Object[])e[3];
+        for(int i = 0; i<argu.length-1;i+=3){
+          System.out.println("_"+labElse+":");
+          generateExpr((Object[])argu[i+1]);
+          System.out.println("(GoFalse _"+labElse+")");
+          generateBody((Object[])argu[i+2]);
+          System.out.println("(Go _"+labEnd+")");
+        }
       }
         System.out.println("_"+labElse+":");
-        generateBody((Object[])e[4]);
+        if(e[4]!=null){
+          Object[] bod = (Object[])e[4];
+          generateBody((Object[])bod[1]);
+        }
         System.out.println("_"+labEnd+":");
         return;
       case "WHILE":
