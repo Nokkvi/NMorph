@@ -5,7 +5,7 @@
 %token <sval> NAME, LITERAL, OPNAME, ERROR
 %type <obj> program function exprs expr binopexpr smallexpr optexpr nonemptyoptexpr elseifexpr elseexpr body
 %type <ival> decls decl parlist optparlist
-%token IF, ELSE, ELSEIF, VAR, WHILE, RETURN
+%token IF, ELSE, ELSIF, VAR, WHILE, RETURN
 %%
 
 start
@@ -86,7 +86,7 @@ nonemptyoptexpr
 
 elseifexpr
   : {$$ = null;}
-  | ELSEIF expr body elseifexpr {$$ = new Object[]{"ELSEIF", $2, ((Vector<Object>)($3)).toArray(), $4};}
+  | ELSIF expr body elseifexpr {$$ = new Object[]{"ELSIF", $2, ((Vector<Object>)($3)).toArray(), $4};}
   ;
 
 elseexpr

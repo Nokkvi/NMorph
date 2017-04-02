@@ -84,9 +84,9 @@ _OPNAME=[\+\-*/!%&=><\:\^\~&|?]+
 	return NanoMorphoParser.ELSE;
 }
 
-"elseif" {
+"elsif" {
 	yyparser.yylval = new NanoMorphoParserVal(yytext());
-	return NanoMorphoParser.ELSEIF;
+	return NanoMorphoParser.ELSIF;
 }
 
 "while" {

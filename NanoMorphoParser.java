@@ -163,7 +163,7 @@ public final static short OPNAME=259;
 public final static short ERROR=260;
 public final static short IF=261;
 public final static short ELSE=262;
-public final static short ELSEIF=263;
+public final static short ELSIF=263;
 public final static short VAR=264;
 public final static short WHILE=265;
 public final static short RETURN=266;
@@ -302,7 +302,7 @@ null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,"NAME","LITERAL","OPNAME","ERROR","IF",
-"ELSE","ELSEIF","VAR","WHILE","RETURN",
+"ELSE","ELSIF","VAR","WHILE","RETURN",
 };
 final static String yyrule[] = {
 "$accept : start",
@@ -338,7 +338,7 @@ final static String yyrule[] = {
 "nonemptyoptexpr : expr",
 "nonemptyoptexpr : nonemptyoptexpr ',' expr",
 "elseifexpr :",
-"elseifexpr : ELSEIF expr body elseifexpr",
+"elseifexpr : ELSIF expr body elseifexpr",
 "elseexpr : ELSE body",
 "elseexpr :",
 "body : '{' exprs '}'",
@@ -807,7 +807,7 @@ case 32:
 break;
 case 33:
 //#line 89 "NanoMorpho.byacc"
-{yyval.obj = new Object[]{"ELSEIF", val_peek(2).obj, ((Vector<Object>)(val_peek(1).obj)).toArray(), val_peek(0).obj};}
+{yyval.obj = new Object[]{"ELSIF", val_peek(2).obj, ((Vector<Object>)(val_peek(1).obj)).toArray(), val_peek(0).obj};}
 break;
 case 34:
 //#line 93 "NanoMorpho.byacc"

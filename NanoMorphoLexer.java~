@@ -174,8 +174,8 @@ public class NanoMorphoLexer {
     "\1\0\1\1\1\2\1\3\1\4\1\1\4\3\1\1"+
     "\2\5\4\3\1\5\1\6\2\0\1\2\1\0\4\3"+
     "\2\0\1\3\1\7\2\3\1\0\1\2\4\3\2\0"+
-    "\2\3\1\10\2\0\1\2\1\3\1\11\1\3\2\12"+
-    "\1\2\1\0\2\3\1\13\1\14\1\15\1\16";
+    "\2\3\1\10\2\0\1\2\1\3\1\11\2\3\2\12"+
+    "\1\2\1\0\1\3\1\13\1\14\1\15\1\16";
 
   private static int [] zzUnpackAction() {
     int [] result = new int[60];
@@ -209,8 +209,8 @@ public class NanoMorphoLexer {
     "\0\u0286\0\u02a8\0\u02ca\0\u02ec\0\u030e\0\u0330\0\146\0\u0352"+
     "\0\u0374\0\u0396\0\u03b8\0\u03da\0\u03fc\0\u041e\0\u0440\0\u0462"+
     "\0\u0484\0\u04a6\0\u04c8\0\146\0\u04ea\0\u050c\0\146\0\u052e"+
-    "\0\u0550\0\u0572\0\42\0\u0594\0\u05b6\0\u05b6\0\u05d8\0\u05fa"+
-    "\0\146\0\42\0\146\0\146";
+    "\0\146\0\u0550\0\u0572\0\42\0\u0594\0\u05b6\0\u05b6\0\u05d8"+
+    "\0\146\0\146\0\42\0\146";
 
   private static int [] zzUnpackRowMap() {
     int [] result = new int[60];
@@ -282,23 +282,21 @@ public class NanoMorphoLexer {
     "\3\0\5\4\1\0\2\4\1\0\1\4\2\0\1\60"+
     "\10\4\22\0\1\26\2\51\37\0\1\26\2\34\24\0"+
     "\1\4\1\0\1\4\3\0\5\4\1\0\2\4\1\0"+
-    "\1\4\2\0\2\4\1\61\6\4\7\0\1\4\1\0"+
-    "\1\4\3\0\5\4\1\0\2\4\1\0\1\4\2\0"+
-    "\1\4\1\62\7\4\6\0\35\55\1\63\1\64\2\63"+
-    "\1\55\1\0\1\65\2\0\1\66\10\0\2\65\24\0"+
-    "\1\4\1\0\1\4\3\0\4\4\1\67\1\0\2\4"+
+    "\1\4\2\0\2\4\1\61\2\4\1\62\3\4\7\0"+
+    "\1\4\1\0\1\4\3\0\5\4\1\0\2\4\1\0"+
+    "\1\4\2\0\1\4\1\63\7\4\6\0\35\55\1\64"+
+    "\1\65\2\64\1\55\1\0\1\66\2\0\1\67\10\0"+
+    "\2\66\24\0\1\4\1\0\1\4\3\0\4\4\1\70"+
+    "\1\0\2\4\1\0\1\4\2\0\11\4\7\0\1\4"+
+    "\1\0\1\4\3\0\3\4\1\71\1\4\1\0\2\4"+
     "\1\0\1\4\2\0\11\4\7\0\1\4\1\0\1\4"+
-    "\3\0\5\4\1\0\2\4\1\0\1\4\2\0\5\4"+
-    "\1\70\3\4\7\0\1\4\1\0\1\4\3\0\5\4"+
-    "\1\0\2\4\1\0\1\4\2\0\2\4\1\71\6\4"+
-    "\43\0\1\72\5\0\1\65\13\0\2\65\24\0\1\4"+
-    "\1\0\1\4\3\0\2\4\1\73\2\4\1\0\2\4"+
-    "\1\0\1\4\2\0\11\4\7\0\1\4\1\0\1\4"+
-    "\3\0\3\4\1\74\1\4\1\0\2\4\1\0\1\4"+
-    "\2\0\11\4\6\0";
+    "\3\0\5\4\1\0\2\4\1\0\1\4\2\0\2\4"+
+    "\1\72\6\4\43\0\1\73\5\0\1\66\13\0\2\66"+
+    "\24\0\1\4\1\0\1\4\3\0\2\4\1\74\2\4"+
+    "\1\0\2\4\1\0\1\4\2\0\11\4\6\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[1564];
+    int [] result = new int[1530];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -338,7 +336,7 @@ public class NanoMorphoLexer {
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\1\11\11\1\1\11\6\1\1\11\2\0\1\11"+
     "\1\0\4\1\2\0\4\1\1\0\5\1\2\0\3\1"+
-    "\2\0\4\1\1\11\2\1\1\0\3\1\1\11\2\1";
+    "\2\0\5\1\1\11\2\1\1\0\3\1\1\11\1\1";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[60];
@@ -878,24 +876,24 @@ public int getColumn()
           case 24: break;
           case 11: 
             { yyparser.yylval = new NanoMorphoParserVal(yytext());
-	return NanoMorphoParser.WHILE;
+	return NanoMorphoParser.ELSIF;
             }
           case 25: break;
           case 12: 
+            { yyparser.yylval = new NanoMorphoParserVal(yytext());
+	return NanoMorphoParser.WHILE;
+            }
+          case 26: break;
+          case 13: 
             // lookahead expression with fixed lookahead length
             zzMarkedPos = Character.offsetByCodePoints
                 (zzBufferL, zzStartRead, zzEndRead - zzStartRead, zzMarkedPos, -2);
             { 
             }
-          case 26: break;
-          case 13: 
-            { yyparser.yylval = new NanoMorphoParserVal(yytext());
-	return NanoMorphoParser.RETURN;
-            }
           case 27: break;
           case 14: 
             { yyparser.yylval = new NanoMorphoParserVal(yytext());
-	return NanoMorphoParser.ELSEIF;
+	return NanoMorphoParser.RETURN;
             }
           case 28: break;
           default:
