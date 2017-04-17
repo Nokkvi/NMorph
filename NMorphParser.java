@@ -16,15 +16,15 @@
 
 
 
-//#line 2 "NanoMorpho.byacc"
+//#line 2 "NMorph.byacc"
         import java.io.*;
         import java.util.*;
-//#line 20 "NanoMorphoParser.java"
+//#line 20 "NMorphParser.java"
 
 
 
 
-public class NanoMorphoParser
+public class NMorphParser
 {
 
 boolean yydebug;        //do I want debug output?
@@ -101,34 +101,34 @@ int i;
 
 
 //########## SEMANTIC VALUES ##########
-//public class NanoMorphoParserVal is defined in NanoMorphoParserVal.java
+//public class NMorphParserVal is defined in NMorphParserVal.java
 
 
 String   yytext;//user variable to return contextual strings
-NanoMorphoParserVal yyval; //used to return semantic vals from action routines
-NanoMorphoParserVal yylval;//the 'lval' (result) I got from yylex()
-NanoMorphoParserVal valstk[];
+NMorphParserVal yyval; //used to return semantic vals from action routines
+NMorphParserVal yylval;//the 'lval' (result) I got from yylex()
+NMorphParserVal valstk[];
 int valptr;
 //###############################################################
 // methods: value stack push,pop,drop,peek.
 //###############################################################
 void val_init()
 {
-  valstk=new NanoMorphoParserVal[YYSTACKSIZE];
-  yyval=new NanoMorphoParserVal();
-  yylval=new NanoMorphoParserVal();
+  valstk=new NMorphParserVal[YYSTACKSIZE];
+  yyval=new NMorphParserVal();
+  yylval=new NMorphParserVal();
   valptr=-1;
 }
-void val_push(NanoMorphoParserVal val)
+void val_push(NMorphParserVal val)
 {
   if (valptr>=YYSTACKSIZE)
     return;
   valstk[++valptr]=val;
 }
-NanoMorphoParserVal val_pop()
+NMorphParserVal val_pop()
 {
   if (valptr<0)
-    return new NanoMorphoParserVal();
+    return new NMorphParserVal();
   return valstk[valptr--];
 }
 void val_drop(int cnt)
@@ -139,17 +139,17 @@ int ptr;
     return;
   valptr = ptr;
 }
-NanoMorphoParserVal val_peek(int relative)
+NMorphParserVal val_peek(int relative)
 {
 int ptr;
   ptr=valptr-relative;
   if (ptr<0)
-    return new NanoMorphoParserVal();
+    return new NMorphParserVal();
   return valstk[ptr];
 }
-final NanoMorphoParserVal dup_yyval(NanoMorphoParserVal val)
+final NMorphParserVal dup_yyval(NMorphParserVal val)
 {
-  NanoMorphoParserVal dup = new NanoMorphoParserVal();
+  NMorphParserVal dup = new NMorphParserVal();
   dup.ival = val.ival;
   dup.dval = val.dval;
   dup.sval = val.sval;
@@ -343,7 +343,7 @@ final static String yyrule[] = {
 "body : '{' exprs '}'",
 };
 
-//#line 98 "NanoMorpho.byacc"
+//#line 98 "NMorph.byacc"
 
 private static int varCount;
 private static HashMap<String,Integer> varTable;
@@ -514,7 +514,7 @@ static void generateBody( Object[] bod )
 		generateExpr((Object[])bod[i]);
   }
 }
-//#line 446 "NanoMorphoParser.java"
+//#line 446 "NMorphParser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -669,151 +669,151 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 1:
-//#line 12 "NanoMorpho.byacc"
+//#line 12 "NMorph.byacc"
 { generateProgram(name,((Vector<Object>)(val_peek(0).obj)).toArray()); }
 break;
 case 2:
-//#line 16 "NanoMorpho.byacc"
+//#line 16 "NMorph.byacc"
 { ((Vector<Object>)(val_peek(1).obj)).add(val_peek(0).obj); yyval.obj=val_peek(1).obj; }
 break;
 case 3:
-//#line 17 "NanoMorpho.byacc"
+//#line 17 "NMorph.byacc"
 { yyval.obj = new Vector<Object>(); ((Vector<Object>)(yyval.obj)).add(val_peek(0).obj); }
 break;
 case 4:
-//#line 21 "NanoMorpho.byacc"
+//#line 21 "NMorph.byacc"
 {
               varCount = 0;
               varTable = new HashMap<String,Integer>();
           }
 break;
 case 5:
-//#line 26 "NanoMorpho.byacc"
+//#line 26 "NMorph.byacc"
 {
             yyval.obj = new Object[]{val_peek(8).sval, val_peek(5).ival, val_peek(2).ival, ((Vector<Object>)(val_peek(1).obj)).toArray()};
           }
 break;
 case 6:
-//#line 32 "NanoMorpho.byacc"
+//#line 32 "NMorph.byacc"
 { addVar(val_peek(0).sval);yyval.ival = yyval.ival+1;}
 break;
 case 7:
-//#line 33 "NanoMorpho.byacc"
+//#line 33 "NMorph.byacc"
 { addVar(val_peek(0).sval);yyval.ival = 1+val_peek(2).ival;}
 break;
 case 8:
-//#line 37 "NanoMorpho.byacc"
+//#line 37 "NMorph.byacc"
 {yyval.ival = 0;}
 break;
 case 9:
-//#line 38 "NanoMorpho.byacc"
+//#line 38 "NMorph.byacc"
 { yyval.ival = val_peek(0).ival;}
 break;
 case 10:
-//#line 42 "NanoMorpho.byacc"
+//#line 42 "NMorph.byacc"
 {yyval.ival = 0;}
 break;
 case 11:
-//#line 43 "NanoMorpho.byacc"
+//#line 43 "NMorph.byacc"
 {yyval.ival = val_peek(2).ival+val_peek(1).ival;}
 break;
 case 12:
-//#line 47 "NanoMorpho.byacc"
+//#line 47 "NMorph.byacc"
 { addVar(val_peek(0).sval); yyval.ival=val_peek(2).ival+1; }
 break;
 case 13:
-//#line 48 "NanoMorpho.byacc"
+//#line 48 "NMorph.byacc"
 {addVar(val_peek(0).sval); yyval.ival=1;}
 break;
 case 14:
-//#line 52 "NanoMorpho.byacc"
+//#line 52 "NMorph.byacc"
 {yyval.obj = new Vector<Object>(); ((Vector<Object>)(yyval.obj)).add(val_peek(1).obj);}
 break;
 case 15:
-//#line 53 "NanoMorpho.byacc"
+//#line 53 "NMorph.byacc"
 {yyval.obj=val_peek(2).obj; ((Vector<Object>)(val_peek(2).obj)).add(val_peek(1).obj);}
 break;
 case 16:
-//#line 57 "NanoMorpho.byacc"
+//#line 57 "NMorph.byacc"
 {yyval.obj = new Object[]{"RETURN", val_peek(0).obj};}
 break;
 case 17:
-//#line 58 "NanoMorpho.byacc"
+//#line 58 "NMorph.byacc"
 {yyval.obj = new Object[]{"STORE", findVar(val_peek(2).sval), val_peek(0).obj};}
 break;
 case 18:
-//#line 59 "NanoMorpho.byacc"
+//#line 59 "NMorph.byacc"
 {yyval.obj = val_peek(0).obj;}
 break;
 case 19:
-//#line 63 "NanoMorpho.byacc"
+//#line 63 "NMorph.byacc"
 {yyval.obj=val_peek(0).obj;}
 break;
 case 20:
-//#line 64 "NanoMorpho.byacc"
+//#line 64 "NMorph.byacc"
 {yyval.obj = new Object[]{"CALL", val_peek(1).sval, new Object[]{val_peek(2).obj, val_peek(0).obj}};}
 break;
 case 21:
-//#line 68 "NanoMorpho.byacc"
+//#line 68 "NMorph.byacc"
 {yyval.obj = new Object[]{"NAME", findVar(val_peek(0).sval)};}
 break;
 case 22:
-//#line 69 "NanoMorpho.byacc"
+//#line 69 "NMorph.byacc"
 {yyval.obj = new Object[]{"CALL", val_peek(3).sval, ((Vector<Object>)(val_peek(1).obj)).toArray()};}
 break;
 case 23:
-//#line 70 "NanoMorpho.byacc"
+//#line 70 "NMorph.byacc"
 {yyval.obj = new Object[]{"CALL", val_peek(1).sval, new Object[]{val_peek(0).obj}};}
 break;
 case 24:
-//#line 71 "NanoMorpho.byacc"
+//#line 71 "NMorph.byacc"
 { yyval.obj = new Object[]{"LITERAL", val_peek(0).sval};}
 break;
 case 25:
-//#line 72 "NanoMorpho.byacc"
+//#line 72 "NMorph.byacc"
 {yyval.obj = val_peek(1).obj;}
 break;
 case 26:
-//#line 73 "NanoMorpho.byacc"
+//#line 73 "NMorph.byacc"
 { yyval.obj = new Object[]{"IF",val_peek(2).obj,val_peek(1).obj,val_peek(0).obj}; }
 break;
 case 27:
-//#line 74 "NanoMorpho.byacc"
+//#line 74 "NMorph.byacc"
 {yyval.obj = new Object[]{"WHILE", val_peek(1).obj, val_peek(0).obj};}
 break;
 case 28:
-//#line 78 "NanoMorpho.byacc"
+//#line 78 "NMorph.byacc"
 { yyval.obj=new Object[]{"LITERAL","null"}; }
 break;
 case 29:
-//#line 79 "NanoMorpho.byacc"
+//#line 79 "NMorph.byacc"
 { yyval.obj=val_peek(0).obj; }
 break;
 case 30:
-//#line 80 "NanoMorpho.byacc"
+//#line 80 "NMorph.byacc"
 { yyval.obj=new Object[]{"IF",val_peek(2).obj,val_peek(1).obj,val_peek(0).obj}; }
 break;
 case 31:
-//#line 84 "NanoMorpho.byacc"
+//#line 84 "NMorph.byacc"
 {yyval.obj = new Vector<Object>();}
 break;
 case 32:
-//#line 85 "NanoMorpho.byacc"
+//#line 85 "NMorph.byacc"
 {yyval.obj = val_peek(0).obj;}
 break;
 case 33:
-//#line 89 "NanoMorpho.byacc"
+//#line 89 "NMorph.byacc"
 {((Vector<Object>)(val_peek(2).obj)).add(val_peek(0).obj); yyval.obj=val_peek(2).obj; }
 break;
 case 34:
-//#line 90 "NanoMorpho.byacc"
+//#line 90 "NMorph.byacc"
 {yyval.obj=new Vector<Object>(); ((Vector<Object>)(yyval.obj)).add(val_peek(0).obj);}
 break;
 case 35:
-//#line 94 "NanoMorpho.byacc"
+//#line 94 "NMorph.byacc"
 { yyval.obj=new Object[]{"BODY",val_peek(1).obj}; }
 break;
-//#line 740 "NanoMorphoParser.java"
+//#line 740 "NMorphParser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
@@ -876,7 +876,7 @@ public void run()
  * Default constructor.  Turn off with -Jnoconstruct .
 
  */
-public NanoMorphoParser()
+public NMorphParser()
 {
   //nothing to do
 }
@@ -886,7 +886,7 @@ public NanoMorphoParser()
  * Create a parser, setting the debug to true or false.
  * @param debugMe true for debugging, false for no debug.
  */
-public NanoMorphoParser(boolean debugMe)
+public NMorphParser(boolean debugMe)
 {
   yydebug=debugMe;
 }

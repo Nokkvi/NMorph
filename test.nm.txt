@@ -1,11 +1,13 @@
-fibo(n) {
-	if(n < 2) {
-		return 1;
-	} else{
-		return fibo(n-1) + fibo(n-2);
+plus(n, m) {
+	var i;
+	i = 0;
+	while(i < m){
+		n = n+m;
+		i = i+1;
 	};
+	return n;
 }
 
 main() {
-	writeln("fibonacci " ++ fibo(6));
+	writeln(plus(2, 3));
 }

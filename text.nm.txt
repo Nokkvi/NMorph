@@ -1,4 +1,3 @@
-main()
-{
-	writeln("Halló Veröld");
+main() {
+	writeln("Hello World");
 }
